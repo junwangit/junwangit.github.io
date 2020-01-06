@@ -1,0 +1,14 @@
+{
+  "name": "junwangit.com",
+  "version": "1.0.0",
+  "description": "企业级研发平台最佳实践",
+  "author": "hanfeng",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "dependencies": {
+    "vuepress": "^1.2.0",
+    "vuepress-theme-reco": "^1.2.0"
+  }
+}

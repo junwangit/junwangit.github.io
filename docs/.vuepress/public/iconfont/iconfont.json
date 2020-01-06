@@ -1,0 +1,51 @@
+{
+  "id": "1598916",
+  "name": "junwangit.com",
+  "font_family": "iconfont",
+  "css_prefix_text": "one-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1177693",
+      "name": "产品",
+      "font_class": "pm",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "5961325",
+      "name": "bug",
+      "font_class": "test",
+      "unicode": "ec63",
+      "unicode_decimal": 60515
+    },
+    {
+      "icon_id": "7057565",
+      "name": "监控运维",
+      "font_class": "ops",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "7765163",
+      "name": "平台_模块",
+      "font_class": "platform",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "9766838",
+      "name": "开发计划",
+      "font_class": "dev",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "10595281",
+      "name": "项目_组织架构_jurassic",
+      "font_class": "jiagou",
+      "unicode": "e6bd",
+      "unicode_decimal": 59069
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 module.exports = {
   "title": "程序猿时光",
-  "description": "企业级研发平台最佳实践",
+  "description": "记录，编码，仅此而已",
   "dest": "dist",
   "head": [
     [
@@ -20,6 +20,11 @@ module.exports = {
   ],
   "theme": "reco",
   "themeConfig": {
+    //  "keyPage": {
+    //   "keys": ['1024'],
+    //   "color": '#42b983', // 登录页动画球的颜色
+    //   "lineColor": '#42b983' // 登录页动画线的颜色
+    // },
     "nav": [
       {
         "text": "首页",
@@ -27,14 +32,21 @@ module.exports = {
         "icon": "reco-home"
       },
       {
+        "text": "万物互联",
+        "icon": "one-wulianwang",
+        "items": [
+          { "text": "ThingsBoard", "link": "/views/iot/tb/", "icon": "one-iot" }
+        ]
+      },
+      {
         "text": "研发平台",
         "icon": 'one-platform',
         "items": [
-          { "text": "产品", "link": "/platform/pm/", "icon": "one-pm" },
-          { "text": "研发", "link": "/platform/R&D/", "icon": "one-jiagou" },
-          { "text": "开发", "link": "/platform/dev/", "icon": "one-dev" },
-          { "text": "测试", "link": "/platform/test/", "icon": "one-test" },
-          { "text": "运维", "link": "/platform/ops/", "icon": "one-ops" }
+          { "text": "产品", "link": "/views/platform/pm/", "icon": "one-pm" },
+          { "text": "研发", "link": "/views/platform/R&D/", "icon": "one-jiagou" },
+          { "text": "开发", "link": "/views/platform/dev/", "icon": "one-dev" },
+          { "text": "测试", "link": "/views/platform/test/", "icon": "one-test" },
+          { "text": "运维", "link": "/views/platform/ops/", "icon": "one-ops" }
         ]
       },
       {
@@ -54,21 +66,21 @@ module.exports = {
         ]
       }
     ],
-    // "type": "blog",
+    "type": "blog",
     "blogConfig": {
       "category": {
         "location": 2,
         "text": "分类"
       },
-      "tag": {
-        "location": 3,
-        "text": "标签"
-      }
+      // "tag": {
+      //   "location": 3,
+      //   "text": "标签"
+      // }
     },
     "friendLink": [
       {
         "title": "程序猿时光",
-        "desc": "企业级研发平台最佳实践",
+        "desc": "记录，编码，仅此而已",
         "email": "junwangzhu@gmail.com",
         "link": "https://junwangit.com"
       }
@@ -88,7 +100,7 @@ module.exports = {
     "author": "hanfeng",
     "authorAvatar": "/avatar.jpg",
     "record": "闽ICP备19005406号-1",
-    "startYear": "2019"
+    "startYear": "2020"
   },
   "markdown": {
     "lineNumbers": true

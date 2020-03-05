@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9255041",
+      "name": "iot 物联网平台",
+      "font_class": "iot",
+      "unicode": "e916",
+      "unicode_decimal": 59670
+    },
+    {
+      "icon_id": "11798989",
+      "name": "物联网",
+      "font_class": "wulianwang",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "10595281",
+      "name": "项目_组织架构_jurassic",
+      "font_class": "jiagou",
+      "unicode": "e6bd",
+      "unicode_decimal": 59069
+    },
+    {
+      "icon_id": "9766838",
+      "name": "开发计划",
+      "font_class": "dev",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
       "icon_id": "1177693",
       "name": "产品",
       "font_class": "pm",
@@ -32,20 +60,6 @@
       "font_class": "platform",
       "unicode": "e65e",
       "unicode_decimal": 58974
-    },
-    {
-      "icon_id": "9766838",
-      "name": "开发计划",
-      "font_class": "dev",
-      "unicode": "e620",
-      "unicode_decimal": 58912
-    },
-    {
-      "icon_id": "10595281",
-      "name": "项目_组织架构_jurassic",
-      "font_class": "jiagou",
-      "unicode": "e6bd",
-      "unicode_decimal": 59069
     }
   ]
 }

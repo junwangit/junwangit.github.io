@@ -1,7 +1,7 @@
 {
   "name": "junwangit.com",
   "version": "1.0.0",
-  "description": "企业级研发平台最佳实践",
+  "description": "个人博客专属",
   "author": "hanfeng",
   "scripts": {
     "dev": "vuepress dev docs",

@@ -104,5 +104,13 @@ module.exports = {
   },
   "markdown": {
     "lineNumbers": true
-  }
+  },
+   plugins: [
+    [
+      '@vuepress/google-analytics',
+      {
+        'ga': 'UA-26539957-4' // UA-00000000-0
+      }
+    ]
+  ]
 }

@@ -674,3 +674,277 @@ Netty 是一个网络编程框架，所以事件是按照它们与入站或出�
 
 每个事件都可以被分发给 ChannelHandler 类中的某个用户实现的方法。这是一个很好的将事件驱动范式直接转换为应用程序构件块的例子。  
 
+### Netty简单实例
+
+**服务端**
+
+```java
+package com.junwangit.netty.server;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @description: 服务入站事件处理
+ * @author: hanfeng
+ * @date: 2020-3-6
+ **/
+@Slf4j
+@ChannelHandler.Sharable
+public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+    /**
+     * 数据接收
+     * @param ctx
+     * @param msg
+     */
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        ByteBuf in = (ByteBuf) msg;
+        log.info("服务接收到数据：{} ", in.toString(CharsetUtil.UTF_8));
+        // 回应消息
+        ctx.write(Unpooled.copiedBuffer("我是Netty服务，我已经收到消息,马上给你办理",
+                CharsetUtil.UTF_8));
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx)
+            throws Exception {
+        ctx.writeAndFlush(Unpooled.EMPTY_BUFFER)
+                .addListener(ChannelFutureListener.CLOSE);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx,
+                                Throwable cause) {
+        cause.printStackTrace();
+        ctx.close();
+    }
+}
+
+```
+
+Echo 服务器会响应传入的消息，所以它需要实现 `ChannelInboundHandler` 接口， 用来定义响应入站事件的方法。  
+
+继承 `ChannelInboundHandlerAdapter` 类也就足够了， 它提供了 `ChannelInboundHandler` 的默认实现。  
+
+- **channelRead()**  对于每个传入的消息都要调用；
+- **channelReadComplete()**  通知`ChannelInboundHandler`最后一次对`channelRead()`的调用是当前批量读取中的最后一条消息；
+- **exceptionCaught()**  在读取操作期间， 有异常抛出时会调用。  
+
+**服务启动引导**
+
+```java
+package com.junwangit.netty.server;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.extern.slf4j.Slf4j;
+
+import java.net.InetSocketAddress;
+
+/**
+ * @description: 说明描述
+ * @author: hanfeng
+ * @date: 2020-3-6
+ **/
+@Slf4j
+public class EchoServer {
+    private final int port;
+
+    public EchoServer(int port) {
+        this.port = port;
+    }
+
+    public static void main(String[] args)
+            throws Exception {
+        // 指定服务端口
+        new EchoServer(19090).start();
+    }
+
+    public void start() throws Exception {
+        final EchoServerHandler serverHandler = new EchoServerHandler();
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(group)
+                    .channel(NioServerSocketChannel.class)
+                    .localAddress(new InetSocketAddress(port))
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(serverHandler);
+                        }
+                    });
+
+            ChannelFuture f = b.bind().sync();
+            log.info("{} started and listening for connections on{} ", EchoServer.class.getName(), f.channel().localAddress());
+            f.channel().closeFuture().sync();
+        } finally {
+            group.shutdownGracefully().sync();
+        }
+    }
+}
+
+```
+
+启动引导主要作用
+
+- 绑定到服务器将在其上监听并接受传入连接请求的端口；
+
+- 配置 Channel，以将有关的入站消息通知给 EchoServerHandler 实例  
+
+**客户端**
+
+```java
+package com.junwangit.netty.client;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * @description: 说明描述
+ * @author: hanfeng
+ * @date: 2020-3-6
+ **/
+@Slf4j
+@ChannelHandler.Sharable
+public class EchoClientHandler
+        extends SimpleChannelInboundHandler<ByteBuf> {
+    /**
+     * 在到服务器的连接已经建立之后将被调用；
+     * @param ctx
+     */
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        ctx.writeAndFlush(Unpooled.copiedBuffer("我需要XXX数据，麻烦提供！",
+                CharsetUtil.UTF_8));
+    }
+
+    /**
+     * 当从服务器接收到一条消息时被调用
+     * @param ctx
+     * @param in
+     */
+    @Override
+    public void channelRead0(ChannelHandlerContext ctx, ByteBuf in) {
+        log.info("客户端接收到消息：{}", in.toString(CharsetUtil.UTF_8));
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx,
+                                Throwable cause) {
+        cause.printStackTrace();
+        ctx.close();
+    }
+}
+```
+
+客户端将拥有一个用来处理数据的 ChannelInboundHandler。  
+
+- **channelActive()**  在到服务器的连接已经建立之后将被调用  
+- **channelRead0()**  当从服务器接收到一条消息时被调用；  
+- **exceptionCaught()**  在处理过程中引发异常时被调用。  
+
+**引导客户端**
+
+```java
+package com.junwangit.netty.client;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.net.InetSocketAddress;
+
+/**
+ * @description: 说明描述
+ * @author: hanfeng
+ * @date: 2020-3-6
+ **/
+public class EchoClient {
+    private final String host;
+    private final int port;
+
+    public EchoClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    public void start()
+            throws Exception {
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap b = new Bootstrap();
+            b.group(group)
+                    .channel(NioSocketChannel.class)
+                    .remoteAddress(new InetSocketAddress(host, port))
+                    .handler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        public void initChannel(SocketChannel ch)
+                                throws Exception {
+                            ch.pipeline().addLast(
+                                    new EchoClientHandler());
+                        }
+                    });
+            ChannelFuture f = b.connect().sync();
+            f.channel().closeFuture().sync();
+        } finally {
+            group.shutdownGracefully().sync();
+        }
+    }
+
+    public static void main(String[] args)
+            throws Exception {
+        new EchoClient("127.0.0.1", 19090).start();
+    }
+}
+
+```
+
+客户端是使用主机和端口参数来连接远程地址 。
+
+客户端主要操作
+
+- 为初始化客户端， 创建了一个 Bootstrap 实例；  
+- 为进行事件处理分配了一个 NioEventLoopGroup 实例， 其中事件处理包括创建新的连接以及处理入站和出站数据；
+- 为服务器连接创建了一个 InetSocketAddress 实例；
+- 当连接被建立时，一个 EchoClientHandler 实例会被安装到（该 Channel 的）ChannelPipeline 中；
+- 在一切都设置完成后，调用 Bootstrap.connect()方法连接到远程节点；  
+
+测试结果：
+
+```shell
+# 服务端
+DEBUG 23:34:01.480 Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@1b103c49 
+INFO  23:34:01.488 服务接收到数据：我需要XXX数据，麻烦提供！  
+
+# 客户端
+DEBUG 23:34:01.434 Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@af3b1c2 
+DEBUG 23:34:01.443 -Dio.netty.recycler.maxCapacityPerThread: 4096 
+DEBUG 23:34:01.443 -Dio.netty.recycler.maxSharedCapacityFactor: 2 
+DEBUG 23:34:01.444 -Dio.netty.recycler.linkCapacity: 16 
+DEBUG 23:34:01.444 -Dio.netty.recycler.ratio: 8 
+INFO  23:34:01.502 客户端接收到消息：我是Netty服务，我已经收到消息,马上给你办理 
+```
+
+实例源码：[netty-echo](https://github.com/junwangit/netty-guide/tree/master/netty-echo)

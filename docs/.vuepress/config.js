@@ -111,6 +111,22 @@ module.exports = {
 	  {
 	    "ga": "UA-26539957-4" // UA-00000000-0
 	  }
-	]
+	],
+	["@vuepress-reco/vuepress-plugin-rss",
+        {
+          "site_url": "https://junwangit.com", // required
+          "copyright": "junwangit 2020", // optional
+          // filter some post
+          //"filter": (frontmatter) => { return true },
+          // How much articles
+          //"count": 10
+        }
+    ],
+    [
+      "sitemap",
+      { 
+       	"hostname": "https://junwangit.com"
+      }
+    ]
   ]
 }

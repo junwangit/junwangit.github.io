@@ -10,5 +10,8 @@
   "dependencies": {
     "vuepress": "^1.2.0",
     "vuepress-theme-reco": "^1.2.0"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-google-analytics": "^1.3.1"
   }
 }

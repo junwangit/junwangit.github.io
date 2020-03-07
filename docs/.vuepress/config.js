@@ -88,7 +88,7 @@ module.exports = {
     "vssueConfig": {
       "platform": "github",
       "owner": 'junwangit',
-      "repo": 'junwangit.github.io',
+      "repo": 'pages',
       "clientId": 'Iv1.c97a6ad47d35c8e3',
       "clientSecret": '1bf9ce5b52cd158e3d6b62ff163826e8b53939cb'
     },
@@ -105,12 +105,12 @@ module.exports = {
   "markdown": {
     "lineNumbers": true
   },
-   plugins: [
-    [
-      '@vuepress/google-analytics',
-      {
-        'ga': 'UA-26539957-4' // UA-00000000-0
-      }
-    ]
+  "plugins": [
+	[
+	  "@vuepress/google-analytics",
+	  {
+	    "ga": "UA-26539957-4" // UA-00000000-0
+	  }
+	]
   ]
 }

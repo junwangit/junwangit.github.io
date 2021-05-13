@@ -100,6 +100,7 @@ module.exports = {
     "author": "hanfeng",
     "authorAvatar": "/avatar.jpg",
     "record": "闽ICP备19005406号-1",
+    "recordLink": 'https://beian.miit.gov.cn/',
     "startYear": "2020"
   },
   "markdown": {
